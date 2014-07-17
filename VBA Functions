@@ -1,0 +1,267 @@
+Sub FinnLeder()
+    Dim LedersBrukernavn As Variant, Brukernavn As Variant, x As Variant, y As Variant
+    
+    Set LedersBrukernavn = Worksheets("Sheet2").Range("V2:V579")
+    Set Brukernavn = Worksheets("NyListe").Range("V2:V578")
+    
+    For Each x In LedersBrukernavn
+        For Each y In Brukernavn
+            If x = y Then x.Offset(0, 1) = y.Offset(0, 1)
+        Next y
+    Next x
+End Sub
+-----------------------------------------------------------------------------------------------------------------------------
+Sub FinnADBrukernavn()
+    Dim NyeBrukernavn As Variant, ADBrukernavn As Variant, x As Variant, y As Variant
+    
+    Set NyeBrukernavn = Worksheets("Sheet2").Range("B2:B579")
+    Set ADBrukernavn = Worksheets("final").Range("E2:E330")
+    
+    For Each x In NyeBrukernavn
+        For Each y In ADBrukernavn
+            If x = y Then x.Offset(0, -1) = y.Offset(0, -3)
+        Next y
+    Next x
+End Sub
+-----------------------------------------------------------------------------------------------------------------------------
+Sub FinnDuplikateAnsattnummer()
+    Dim Liste As Variant, SjekkMotListe As Variant, x As Variant, y As Variant
+    
+    Set Liste = Worksheets("Ark1").Range("B2:B336")
+    Set SjekkMotListe = Worksheets("Ark4").Range("A2:A203")
+    
+    For Each x In Liste
+        For Each y In SjekkMotListe
+            If x = y Then x.Offset(0, 1) = "1"
+        Next y
+    Next x
+End Sub
+-----------------------------------------------------------------------------------------------------------------------------
+Sub FinnADKonto()
+    Dim Ansatte As Variant, AD As Variant, x As Variant, y As Variant
+    
+    Set Ansatte = Worksheets("Sheet2").Range("B2:B579")
+    Set AD = Worksheets("final").Range("E2:E330")
+    
+    For Each x In Ansatte
+        For Each y In AD
+            If (x = y) Then x.Offset(0, 2) = "'true"
+            'x.Offset(0, 2) = "'false"
+        Next y
+    Next x
+End Sub
+-----------------------------------------------------------------------------------------------------------------------------
+Sub test()
+likenr:
+    If (x <> y) Then GoTo ulikenr:
+        x.Offset(0, 3) = "1"
+    Next y
+ulikenr:
+x.Offset(0, 3) = "0"
+GoTo likenr:
+For Each y In AD
+            If (x = y) Then x.Offset(0, 3) = "1"
+            ElseIf (x <> y) Then x.Offset(0, 3) = "0"
+            Else
+            End If
+        Next y
+End Sub
+-----------------------------------------------------------------------------------------------------------------------------
+Sub Remove_Duplicates()
+    ' Sletter duplikater. Viser ikke hvem disse er!
+    ActiveSheet.Range("A1:A7328").RemoveDuplicates Columns:=Array(1)
+End Sub
+-----------------------------------------------------------------------------------------------------------------------------
+Sub MarkerDuplikater()
+
+    Dim Rng As Range
+    Dim cel As Range
+    Dim col As Range
+    Dim Target As Range
+    Dim c As Range
+    Dim firstAddress As String
+
+Application.ScreenUpdating = False
+    Set Target = Worksheets("Brukernavnliste med duplikater").Range("A1:A7328")
+    'Duplicates will be highlighted in red
+    Target.Interior.ColorIndex = xlNone
+    
+    For Each col In Target.Columns
+    On Error GoTo MyError:
+    
+        Set Rng = Range(Cells(1, col.Column), Cells(Rows.Count, col.Column).End(xlUp))
+        
+        For Each cel In col.Cells
+            
+            If WorksheetFunction.CountIf(Rng, cel.Value) > 1 Then
+            
+                Set c = Rng.Find(What:=cel.Value, LookIn:=xlValues)
+                
+                ' Marker i cellen vedsiden av.
+                c.Offset(0, 1) = 1
+                If Not c Is Nothing Then
+                    firstAddress = c.Address
+                    Do
+                        c.Interior.ColorIndex = 3
+                        Set c = Rng.FindNext(c)
+
+                    Loop While Not c Is Nothing And c.Address <> firstAddress
+                End If
+            End If
+        Next
+    Next col
+Application.ScreenUpdating = True
+MsgBox ("Porsedyren er ferdig!",)
+MyError:
+Debug.Print Err
+
+End Sub
+-----------------------------------------------------------------------------------------------------------------------------
+Sub Find_Matches()
+    Dim AnsattnummerJP As Variant, AnsattnummerAD As Variant, x As Variant, y As Variant
+    
+    Set AnsattnummerJP = Worksheets("Fra-SAP").Range("B2:B1409")
+    Set AnsattnummerAD = Worksheets("Fra-AD").Range("D2:D1481")
+    
+    For Each JP In AnsattnummerJP
+        For Each AD In AnsattnummerAD
+            '# Skriver ansattnr
+            If JP = AD Then JP.Offset(0, 1) = AD
+            
+            '# Skriver Brukernavn
+            If JP = AD Then JP.Offset(0, 6) = AD.Offset(0, -3)
+        Next AD
+    Next JP
+End Sub
+-----------------------------------------------------------------------------------------------------------------------------
+Sub Find_Kjent()
+    Dim AnsattnummerAlle As Variant, AnsattnummerKjent As Variant, x As Variant, y As Variant
+    
+    Set AnsattnummerAlle = Worksheets("Fra-SAP").Range("B2:B1409")
+    Set AnsattnummerKjent = Worksheets("Ark1").Range("A1:A350")
+    
+    For Each x In AnsattnummerAlle
+        For Each y In AnsattnummerKjent
+            If x = y Then x.Offset(0, 9) = 1
+        Next y
+    Next x
+End Sub
+-----------------------------------------------------------------------------------------------------------------------------
+Sub Find_Like()
+    Dim AnsattnummerJP As Variant, AnsattnummerAD As Variant, x As Variant, y As Variant
+    
+    Set AnsattnummerJP = Worksheets("Fra-SAP").Range("B2:B1409")
+    Set AnsattnummerAD = Worksheets("Fra-SAP").Range("C1:C1409")
+    
+    For Each x In AnsattnummerJP
+        For Each y In AnsattnummerAD
+            If x = y Then x.Offset(0, 2) = "Likt"
+        Next y
+    Next x
+End Sub
+-----------------------------------------------------------------------------------------------------------------------------
+Sub NyttBrukernavn()
+Dim GammeltBrukernavn As Variant, NyttBrukernavn As String, x As Variant, y As Variant
+
+Set GammeltBrukernavn = Worksheets("Nye-Brukernavn").Range("G2:G1409")
+
+For Each x In GammeltBrukernavn
+    If InStr(x.Value, "_L") Then
+        tempbruker = Trim(x.Value)
+        Num = InStr(tempbruker, "_L")
+        newnum = Num - 1
+        phrase = Left(tempbruker, newnum)
+        x.Offset(0, 2) = phrase
+    End If
+Next x
+
+End Sub
+-----------------------------------------------------------------------------------------------------------------------------
+Sub Find_Brukernavn()
+    Dim brukernavn As Variant, x As Variant, y As Variant
+    
+    Set brukernavn = Worksheets("Fra-SAP").Range("G2:G1409")
+    
+    For Each x In brukernavn
+        If InStr(x.Value, "_L") Then x.Offset(0, 7) = 1
+    Next x
+End Sub
+-----------------------------------------------------------------------------------------------------------------------------
+Sub RemoveTrail()
+Dim GammeltBrukernavn As Variant, NyttBrukernavn As String, x As Variant, y As Variant
+
+Set GammeltBrukernavn = Worksheets("Ark4").Range("A2:A7329")
+
+For Each x In GammeltBrukernavn
+        tempbruker = Trim(x.Value)
+        x.Offset(0, 1) = tempbruker
+Next x
+
+End Sub
+-----------------------------------------------------------------------------------------------------------------------------
+Sub DupsGreen()
+    Application.ScreenUpdating = False
+    Set Brukernavn = Worksheets("Ark4").Range("A1:A7328")
+    Rng = Brukernavn.Rows.Count
+        
+    For i = Rng To 1 Step -1
+        myCheck = ActiveCell
+        ActiveCell.Offset(1, 0).Select
+            For j = 1 To i
+                If ActiveCell = myCheck Then
+                    selection.Font.Bold = True
+                    selection.Font.ColorIndex = 4
+                End If
+            ActiveCell.Offset(1, 0).Select
+            Next j
+    ActiveCell.Offset(-i, 0).Select
+    Next i
+    
+    Application.ScreenUpdating = True
+End Sub
+-----------------------------------------------------------------------------------------------------------------------------
+Sub Find_Matches()
+    Dim CompareRange As Variant, x As Variant, y As Variant
+    ' Angi CompareRange som området der du vil
+    ' sammenligne utvalget.
+    Set CompareRange = Worksheets("Sheet2").Range("C1:B234")
+    '
+    ' Velg celler som data skal sammelingnes med. Uten denne må cellene velges manuelt.
+    'ActiveSheet.Range("D2:D1487").Select
+    Worksheets("Alle _L fra AD").Range("D2:D1487").Select
+    ' Obs!&#160;   Hvis sammenligningsområdet finnes i en annen arbeidsbok
+    ' eller et annet regneark, bruker du følgende syntaks:
+    ' Set CompareRange = Workbooks("Bok2"). _
+    '   Worksheets("Ark2").Range("C1:C5")
+    '
+    ' Gjenta gjennom hver celle i utvalget og sammenlign det med
+    ' hver celle i CompareRange.
+    For Each x In Selection
+        For Each y In CompareRange
+            If x = y Then x.Offset(0, 3) = 1
+        Next y
+    Next x
+End Sub
+-----------------------------------------------------------------------------------------------------------------------------
+Sub Find_Text()
+Dim Sokerad As Variant, Kilderad As Variant
+
+Set Kilderad = Worksheets("Kilde").Range("A1:A330")
+Set Sokerad = Worksheets("Alle _L fra AD").Range("D2:D1481")
+'Worksheets("Kilde").Range("F2:F1478")
+
+For Each x In Sokerad
+    For Each y In Kilderad
+        If x = y Then x.Offset(0, 3) = 1
+        If x.Offset(0, 2) = "LimitedUsers" Then x.Offset(0, 4) = 1
+    Next y
+Next x
+
+End Sub
+-----------------------------------------------------------------------------------------------------------------------------
+Sub ListWorkSheetNames()
+    For i = 1 To Sheets.Count
+        Worksheets("Alle _L fra AD").Range("M" & i) = Sheets(i).Name
+    Next i
+End Sub
+-----------------------------------------------------------------------------------------------------------------------------
