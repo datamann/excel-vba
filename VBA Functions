@@ -1,3 +1,55 @@
+-----------------------------------------------------------------------------------------------------------------------------
+Sub SjekkeLikeBrukernavn()
+    Dim SAP As Variant, x As Variant, IDM As Variant, AD As Variant, y As Variant, z As Variant
+    Dim SAPName As String, IDMName As String, ADName As String
+    
+    Set IDM = Worksheets("IDM").Range("B2:B6508")
+    Set SAP = Worksheets("SAP").Range("A2:A5953")
+    Set AD = Worksheets("AD").Range("B2:B5448")
+    
+    For Each x In IDM
+        
+        IDMemp = x.Offset(0, 0)
+        IDMName = x.Offset(0, -1)
+        
+            For Each y In SAP
+                If y = x Then SAPemp = y.Offset(0, 0)
+                If y = x Then SAPName = y.Offset(0, 2)
+            Next y
+            
+            For Each z In AD
+                If z = x Then ADemp = z.Offset(0, 0)
+                If z = x Then ADName = z.Offset(0, 1)
+            Next z
+            
+
+                x.Offset(0, 4) = IDMemp
+                x.Offset(0, 5) = SAPemp
+                x.Offset(0, 6) = ADemp
+                              
+                IDMemp = Null
+                SAPemp = Null
+                ADemp = Null
+        
+        
+                IDMName = LCase(IDMName)
+                IDMName = Trim(IDMName)
+                SAPName = LCase(SAPName)
+                SAPName = Trim(SAPName)
+                ADName = LCase(ADName)
+                ADName = Trim(ADName)
+        
+                x.Offset(0, 8) = IDMName
+                x.Offset(0, 9) = SAPName
+                x.Offset(0, 10) = ADName
+                IDMName = Empty
+                SAPName = Empty
+                ADName = Empty
+        
+        If x = "30750" Then Exit Sub
+    Next x
+End Sub
+-----------------------------------------------------------------------------------------------------------------------------
 Sub FinnLeder()
     Dim LedersBrukernavn As Variant, Brukernavn As Variant, x As Variant, y As Variant
     
