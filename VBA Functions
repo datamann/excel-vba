@@ -1,4 +1,30 @@
 -----------------------------------------------------------------------------------------------------------------------------
+Sub Find_CargonetADAccounts()
+    Application.ScreenUpdating = False
+    Dim SourceRange As Variant, CompareRange As Variant, x As Variant, y As Variant
+    Set SourceRange = Worksheets("NSB Ansatte").Range("A2:A7810")
+    Set CompareRange = Worksheets("Totalt antall Cargonet AD-Konti").Range("A2:A940")
+    For Each x In SourceRange
+        For Each y In CompareRange
+            If (x = y) Then x.Offset(0, 6) = y.Offset(0, 4)
+        Next y
+    Next x
+    Application.ScreenUpdating = True
+End Sub
+-----------------------------------------------------------------------------------------------------------------------------
+Sub Find_NSBADAccounts()
+    Application.ScreenUpdating = False
+    Dim SourceRange As Variant, CompareRange As Variant, x As Variant, y As Variant
+    Set SourceRange = Worksheets("NSB Ansatte").Range("A2:A7810")
+    Set CompareRange = Worksheets("Totalt antall AD-Konti").Range("A2:A7991")
+    For Each x In SourceRange
+        For Each y In CompareRange
+            If (x = y) Then x.Offset(0, 5) = y.Offset(0, 4)
+        Next y
+    Next x
+    Application.ScreenUpdating = True
+End Sub
+-----------------------------------------------------------------------------------------------------------------------------
 Sub SjekkeLikeBrukernavn()
     Dim SAP As Variant, x As Variant, IDM As Variant, AD As Variant, y As Variant, z As Variant
     Dim SAPName As String, IDMName As String, ADName As String
