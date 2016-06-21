@@ -1,4 +1,19 @@
 -----------------------------------------------------------------------------------------------------------------------------
+Sub Find_ADAccounts()
+    Application.ScreenUpdating = False
+    Dim SourceRange As Variant, CompareRange As Variant, x As Variant, y As Variant
+    Set SourceRange = Worksheets("Ark1").Range("A2:A20")
+    Set CompareRange = Worksheets("NSB Ansatte").Range("A2:A7912")
+    For Each x In SourceRange
+        For Each y In CompareRange
+            If (LCase(x) = LCase(y)) Then x.Offset(0, 12) = y.Offset(0, 4)
+            If (LCase(x) = LCase(y)) Then x.Offset(0, 13) = y.Offset(0, 5)
+            If (LCase(x) = LCase(y)) Then x.Offset(0, 14) = y.Offset(0, 10)
+        Next y
+    Next x
+    Application.ScreenUpdating = True
+End Sub
+-----------------------------------------------------------------------------------------------------------------------------
 Sub Find_CargonetADAccounts()
     Application.ScreenUpdating = False
     Dim SourceRange As Variant, CompareRange As Variant, x As Variant, y As Variant
