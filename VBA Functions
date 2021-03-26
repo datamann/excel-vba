@@ -1,4 +1,28 @@
 -----------------------------------------------------------------------------------------------------------------------------
+Sub HasPAMAccount()
+Dim Empolyees As Variant, CyberArk As Variant, x As Variant, y As Variant
+
+Set Empolyees = Worksheets("HR").Range("C2:C44094")
+Set CyberArk = Worksheets("CyberArk").Range("A2:A23998")
+    
+    For Each x In Empolyees
+        If x.Value <> "" Then
+        
+            If x.Value = "xxxxxx" Then
+                Exit Sub
+            End If
+        
+            For Each y In CyberArk
+                If InStr(y.Value, x.Value) Then
+                    x.Offset(0, 1) = "1"
+                End If
+            Next y
+        
+        End If
+    Next x
+
+End Sub
+-----------------------------------------------------------------------------------------------------------------------------
 Sub Find_ADAccounts()
     Application.ScreenUpdating = False
     Dim SourceRange As Variant, CompareRange As Variant, x As Variant, y As Variant
